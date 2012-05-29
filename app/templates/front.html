@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Hey!{% endblock title %}
+{% block creamyfilling %}
+<!-- settings 
+    HOST_NAME: {{ g.settings.HOST_NAME }}
+    DEPLOYMENT_TARGET: {{ g.settings.DEPLOYMENT_TARGET }}
+-->
+<div class="container">
+    <div class="row-fluid" id="header">
+        <div class="span1">&nbsp;</div>
+        <div id="admin-front" class="span10">
+            <div class="hero-unit">
+                <h1>The gallery generator</h1>
+                <p>This machine will make a big, pretty photo gallery from a gallery in P2P. Please edit the photos, captions, thumbnails and everything else the same way you would for a regular gallery in P2P.</p>
+                <p>Then, when you're ready to make it awesome, paste the slug into the box below.</p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {% endwith %}    
+            <form id="render_form" action="/render_gallery" method="post" accept-charset="utf-8" class="form-horizontal">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="photo_gallery_slug">Slug</label>
+                        <div class="controls">
+                            <input type="text" name="photo_gallery_slug" value="{{ photo_gallery_slug }}" id="photo_gallery_slug" class='required input-xlarge'>
+                            <p class="help-block">This should be the slug for a photo gallery</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="section">Section</label>
+                        <div class="controls">
+                            <input type="text" data-provide="typeahead" name="section" id="section" class='required' value="{{ section }}">
+                            <p class="help-block">Necessary so that the we put the correct ads on the gallery!</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" class="btn btn-primary" value="Next step: Preview the gallery &raquo;"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="span1">&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+        $("#render_form").validate({
+                submitHandler: function(form) {
+                $('<div id="wait-message">This may take a moment. A big gallery may take several minutes to generate.</div>')
+                    .appendTo(document.body)
+                $('<div class="modal-backdrop" />')
+                    .css('opacity', 0)
+                    .appendTo(document.body)
+                    .animate({'opacity' : 0.8})
+                    .spin({ lines: 12, length: 12, width: 5, radius: 14, color: '#ffffff' });
+                form.submit();
+            }
+        });
+        $("#section").typeahead({'source': SECTION_TYPEAHEAD_OPTIONS});
+        $("#photo_gallery_slug").focus();
+    });
+</script>
+{% endblock creamyfilling %}

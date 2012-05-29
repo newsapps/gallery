@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>Error</title>
+    </head>
+    <body>
+        {% if message %}<h1>{{ message }}</h1>
+        {% else %}An error occurred.{% endif %}
+        {% if slug %}Slug: {{ slug }}{% endif %}
+        {% if exception %}
+        <h2>exception</h2>
+        {{ exception }}
+        {% endif %}
+        {% if traceback %}
+        <h2>traceback</h2>
+        <pre>{{ traceback }}</pre>
+        {% endif %}
+    </body>
+</html>

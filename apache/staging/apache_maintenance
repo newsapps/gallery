@@ -1,0 +1,32 @@
+<VirtualHost *:80>
+ServerName gallery.beta.tribapps.com
+ServerAlias www.gallery.beta.tribapps.com
+ 
+    <Directory  /home/newsapps/sites/gallery/repository/app>
+        Order allow,deny
+        Allow from 163.192.0.0/16
+        Allow from 163.193.0.0/16
+        Allow from 163.194.0.0/16
+    </Directory>
+    
+    Redirect permanent /favicon.ico http://media-beta.tribapps.com/favicon.ico
+    
+    Alias /robots.txt /home/newsapps/sites/gallery/repository/gallery/assets/robots.txt
+    
+    ErrorLog /home/newsapps/logs/gallery.error.log
+    LogLevel warn
+
+    CustomLog /home/newsapps/logs/gallery.access.log combined
+    
+    ServerSignature Off
+    
+    RewriteEngine on
+    # canonical hostname
+    RewriteCond %{HTTP_HOST} ^www.gallery.beta.tribapps.com [NC] 
+    RewriteRule ^/(.*)  http://gallery.beta.tribapps.com/$1 [L,R]
+    
+    DocumentRoot /home/newsapps/sites/gallery/repository/app/static
+    
+    RewriteCond %{REQUEST_URI} !/maintenance.html$ 
+    RewriteRule $ /maintenance.html [R=302,L]
+</VirtualHost>

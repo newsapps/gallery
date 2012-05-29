@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Done{% endblock title %}
+{% block creamyfilling %}
+<div class="container">
+    <div class="row" id="header">
+        <div id="admin-done" class="span12">
+            <div class="hero-unit">
+                <h1>Yay! Your gallery is ready.</h1>
+                <ul>
+                    <li><strong>See it here</strong>: <a href="http://{{ S3_BUCKET_NAME }}/{{ slug }}">http://{{ S3_BUCKET_NAME }}/{{ slug }}</a></li>
+                    {% if storylink %}
+                    <li><strong>Storylink slug</strong>: <input type="text" class="input-xxlarge" value="{{ storylink.slug }}" readonly /></li>
+                    <li><strong><a href="{{ P2P_ROOT }}/content_items/edit/{{ storylink.id }}">Edit the story link in P2P</a></strong>: Click this link to open the story link and add a thumbnail.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock creamyfilling %}

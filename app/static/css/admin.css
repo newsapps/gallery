@@ -1,0 +1,36 @@
+html, body { height:100%; overflow:hidden; }
+
+.hero-unit h1 { margin-bottom:24px; }
+.hero-unit ul li { font-size:20px; line-height:36px; }
+
+#admin-front { padding-top:20px; }
+#admin-front form { margin-top:10px; }
+#admin-front form label { font-size:18px; }
+
+#admin-review { height:100%; background-color:lavenderblush; }
+#admin-review h3 { margin-top:12px; }
+#admin-review form label { font-size:12px; }
+#admin-review label { display:inline; }
+#admin-review iframe { width:100%; height:100%; border:none; }
+#admin-review table { height:100%; width:100%; border-collapse:collapse; }
+#admin-review #bottom-frame { height:100%; border-top:1px solid #999; }
+
+#publish-modal { width:670px; margin-left:-335px; margin-top:20px; top:0; }
+#publish-modal .modal-body { -moz-border-radiusmax-height:400px; }
+#publish-modal h4 { padding-bottom: 10px; margin-top: 20px; }
+#publish-modal .thumbnail.selected { background-color:#0074CC; }
+#publish-modal .not-image { height: 67px; padding-top: 5px; font-size: 22px; text-align: center; background-color: white; color: black; line-height: 30px; }
+#publish-modal .thumbnails > li { height: 82px; }
+
+#admin-done { padding-top:20px; }
+
+ul.flashes { list-style: none; margin-bottom: 27px; font-size: 18px; line-height: 27px;}
+ul.flashes li { margin-left: -25px;}
+ul.flashes li.error { color: red;}
+ul.flashes .err-label { font-weight: bold; }
+
+#wait-message { text-align: center; font-size: 24px; position: absolute; top: 40px; color: white; z-index: 9999; width: 100%; }
+
+/* begin jQuery validate */
+#admin-front form label.error, label.error { color:red; display:inline-block; margin-left:10px; font-size:14px; }
+/* end jQuery validate */

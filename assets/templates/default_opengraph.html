@@ -1,0 +1,17 @@
+<html prefix="og: http://ogp.me/ns#">
+<head>
+  <title>{{ title }}</title>
+  <!-- required: title, type, url, image http://ogp.me/ -->
+  <meta property="og:title" content="{{ title|e }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ photo.og_url|e }}" />
+  <meta property="og:image" content="{{ gallery.gallery.url_root }}/{{ photo.phone_url }}" />
+  <meta property="og:description" content="{{ photo.caption|striptags()|e }}" />
+<script>
+window.onload = function() { window.location.href = '{{ gallery.gallery.url_root }}/index.html#{{ photo.slug }}'; }
+</script>
+</head>
+<body>
+<a href="{{ gallery.gallery.url_root }}/index.html#{{ photo.slug }}">redirecting...</a>
+</body>
+</html>

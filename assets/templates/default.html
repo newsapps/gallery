@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if FLASK_BASE %}<base href="{{ FLASK_BASE }}">{% endif %}
+    <title>{{ gallery.title }} -- Chicago Tribune</title>
+    <script>
+        window.gallerySettings = { 'title' : "{{ gallery.title|e }}", {% if section %} 'section' : '{{ section }}' {% endif %} };
+        window._gaq = window._gaq || [];
+    </script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" /> -->
+    <script type="text/javascript" src="bootstrap/js/bootstrap-modal.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/gallery.css?ts={{ timestamp }}" />
+    <script type="text/javascript" src="js/underscore-min.js"></script>
+    <script type="text/javascript" src="js/gallery.js?ts={{ timestamp }}"></script>
+    <script type="text/javascript" src="js/jquery.smooth-scroll.min.js"></script>
+    <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    {% if gallery.seodescription %}
+    <meta name='description' content='{{ gallery.seodescription|e }}'/>
+    {% elif gallery.body %}
+    <meta name='description' content='{{ gallery.body|striptags|e }}'/>
+    {% endif %}
+    {% if gallery.body %}
+    <meta property="og:description" content="{{ gallery.body|striptags|e }}" />
+    {% endif %}
+    <meta property="og:type" content="website" />
+</head>
+<body>
+
+    <div id="link" class="modal">
+        <div class="modal-body">
+            <form>
+              <fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="input01">Copy and paste to send a <nobr>friend directly to this photo</nobr></label>
+                  <div class="controls">
+                    <input type="text" class="input-xxlarge" id="input01">
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-inverse" data-dismiss="modal">Back to gallery</a>
+        </div>
+    </div>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div id="nav" class="clearfix">
+        <a href="http://chicagotribune.com"><img src="img/logo-med-white.png" alt="Chicago Tribune"/></a>
+        <ul>
+            <li><a href="http://www.chicagotribune.com/news/photo/">Photo desk</a></li>
+            <li><a href="http://www.chicagotribune.com/news/data/">Maps &amp; apps</a></li>
+        </ul>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid" id="header">
+            <div class="fb-like" data-href="{{ gallery.url_root }}/" data-send="false" data-layout="box_count" data-width="50" data-show-faces="false" data-font="arial"></div>
+            <h1>{{ gallery.title|e }}</h1>
+            <p class="byline">
+                {{ gallery.create_time|format_iso("%b. %e, %Y") }}
+            </p>
+            {% if gallery.body %}
+            <p>
+                {{ gallery.body|safe }}
+            </p>
+            {% endif %}
+        </div>
+        <div id="gallery" class="clearfix">
+               
+            <div id="traveller">
+                <div id="boom" class="cleated">
+                    <div id="mask"></div>
+                    <div id="thisisnotanad">
+                        <iframe class="ad" id="ad" height="250" width="300" vspace="0" hspace="0" marginheight="0" marginwidth="0" align="center" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                    <div id="sheet">
+                        {% for photo in photos %}
+                        <div class="thumb" id="thumb-{{ loop.index }}"><a class="smooth" href="#{{ loop.index }}"><img src="{{ photo.gallery_thumbnail_url }}"/></a></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div id="photos">
+                {% for photo in photos %}
+                <div class="photo-wrapper" id="{{ loop.index }}">
+                    <div class="photo clearfix" id="{{ photo.slug }}">
+                        {% if not loop.first %}
+                        <a class="smooth nav previous" href="#{{ loop.index -1 }}">&#9664;&nbsp;&nbsp;Previous</a>
+                        {% endif %}
+                        {% if not loop.last %}
+                        <a class="smooth nav next" href="#{{ loop.index + 1 }}">Next&nbsp;&nbsp;&#9654;</a>
+                        {% endif %}
+                        <div class="fullsize-wrapper">
+                            <noscript data-phone-url="{{ photo.phone_url }}" data-tablet-url="{{ photo.tablet_url }}" data-desktop-url="{{ photo.desktop_url }}" data-full-url="{{ photo.full_url }}" data-alt="{{ photo.caption|striptags|e }}">
+                                <img class="fullsize" src="{{ photo.phone_url }}" alt="{{ photo.caption|striptags|e }}"/>
+                            </noscript>
+                        </div>
+                        <div class="buttons">
+                            <nobr><a class="link" href="{{ gallery.url_root }}/#{{ photo.slug }}">Link to this photo <i class="icon-share icon-white"></i></a></nobr>
+                            <div class="fb-like" data-href="{{ photo.og_url }}" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-font="arial"></div>
+                            <div class="pin-it"><a target="_blank" href="http://pinterest.com/pin/create/button/?url={{ gallery.url_root|quote_plus }}%2F&amp;media={{ gallery.url_root|quote_plus }}%2F{{ photo.tablet_url }}&amp;description={{ photo.caption|striptags|e }}" class="pin-it-button" count-layout="horizontal"><img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" /></a></div>
+                        </div>
+                        <p>{% if photo.caption %}{{ photo.caption|safe }} &mdash; {% endif %}<em>{% if photo.credit %}{{ photo.credit|e }}, {% endif %}{{ photo.create_time|format_iso("%b. %e, %Y") }}</em></p>
+                    </div>
+                </div>
+                {% endfor %}
+                <a href="#{{ photos[0].slug }}" id="back-to-top">&laquo; Back to top</a> 
+            </div>
+            
+        </div>
+            
+        <div id="footer">
+            <a rel="external" href="http://chicagotribune.com/tos/">Terms of service</a> | 
+            <a rel="external" href="http://chicagotribune.com/privacy/">Privacy</a> | 
+            <a rel="external" href="http://chicagotribune.com">Chicago Tribune</a>, 435 N. Michigan Avenue, Chicago, IL 60611
+        </div>
+    </div>
+
+    <script language="JavaScript" type="text/javascript">
+        var s_account = "tribglobal";
+    </script>
+    <!-- START OMNITURE // hive:metrics-tribune -->
+    
+    <!-- SiteCatalyst code version: H.1.
+Copyright 1997-2005 Omniture, Inc. More info available at
+http://www.omniture.com -->
+    <script type="text/javascript" src="http://www.chicagotribune.com/hive/javascripts/metrics/s_code_trb.js">
+</script>
+    <script language="JavaScript" type="text/javascript">
+    s.pageName="Photo gallery {{ gallery.title }} -- News application, 3rd Party"
+    s.server="www.chicagotribune.com"
+    s.channel="Chicago Tribune:{{ section|replace('/', ':') }}"
+    s.prop38="photogallery";
+	s.eVar21="photogallery";
+    // @TODO generate properly
+    s.hier1="Chicago Tribune:{{ section|replace('/', ':') }}:Photo gallery {{ gallery.title }} -- News application, 3rd Party"
+    s.hier2="{{ section|replace('/', ':') }}:Photo gallery {{ gallery.title }} -- News application, 3rd Party"
+
+    /************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+    var s_code=s.t();if(s_code)document.write(s_code) 
+    -->  
+    </script><script language="JavaScript" type="text/javascript">
+<!--
+    if(navigator.appVersion.indexOf('MSIE')>=0) document.write(unescape('%3C')+'\!-'+'-')
+    //-->
+    </script><!--/DO NOT REMOVE/-->
+    <!-- End SiteCatalyst code version: H.1. -->
+    <!-- START REVENUE SCIENCE PIXELLING CODE -->
+    <script src="http://js.revsci.net/gateway/gw.js?csid=B08725" type="text/javascript">
+</script><script type="text/javascript">
+DM_addEncToLoc("Site", (s.server));
+    DM_addEncToLoc("channel", (s.channel));
+    DM_addEncToLoc("keyword", (s.prop3));
+    DM_cat(s.hier1);
+    DM_tag();
+    </script><!-- END REVENUE SCIENCE PIXELLING CODE -->
+    <!-- Time: Tue May 11 15:01:30 PDT 2010-->
+    <!--x-Instance-Name: i9s27n1-->
+
+    <script type="text/javascript">
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <script type="text/javascript">
+    var _sf_async_config={uid:3096,domain:"media.apps.chicagotribune.com"};
+    (function(){
+      function loadChartbeat() {
+        window._sf_endpt=(new Date()).getTime();
+        var e = document.createElement('script');
+        e.setAttribute('language', 'javascript');
+        e.setAttribute('type', 'text/javascript');
+        e.setAttribute('src',
+           (("https:" == document.location.protocol) ? "https://s3.amazonaws.com/" : "http://") +
+           "static.chartbeat.com/js/chartbeat.js");
+        document.body.appendChild(e);
+      }
+      var oldonload = window.onload;
+      window.onload = (typeof window.onload != 'function') ?
+         loadChartbeat : function() { oldonload(); loadChartbeat(); };
+    })();
+    </script>
+</body>
+</html>

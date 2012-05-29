@@ -1,0 +1,79 @@
+body { background-color:#1a1a1a; color:#eee; }
+a { color:#999; }
+a:hover { color:#eee; text-decoration:none; }
+
+#nav { background-color: #262626; color:white; margin-bottom:40px; border-bottom: 1px solid #555; }
+#nav img { display:block; float:left; height:20px; width:138px; margin:10px 10px 10px 140px; }
+#nav ul { display:block; float:left; margin-bottom:0; margin-left:10px; }
+#nav ul li { display:inline; line-height:40px; margin-right:10px; }
+#nav a { color:white; }
+
+#header { margin-left: 115px; width:700px; }
+#header .fb-like { float:right; margin-top:5px; }
+#header .byline { color:#888; margin:15px 0 10px; clear:both; }
+#header h1 { font-size:44px; line-height:46px; font-family:Georgia, serif; font-weight:normal; margin-right:20px; }
+
+#link { display:none; width:570px; }
+
+#traveller { position:absolute; left:20px; }
+#boom { position:fixed; top:0px; padding-top:20px; }
+#boom.cleated { position:relative; }
+#mask { background-color: white; position: relative; height: 25px; margin-top: -25px; background-color:#1a1a1a; }
+#thisisnotanad { height:250px; width:300px; margin-bottom: 10px; z-index:99; position:relative; background-color:#262626;}
+.thumb { margin-bottom: 10px; text-align: center; padding: 5px; border: 1px solid #555; margin-left: 101px; background-color:#262626; line-height:0; }
+.thumb a { line-height: 0; }
+.thumb img.selected { opacity:.4; }
+.thumb img { height:105px; }
+
+#photos { margin-left:340px; }
+.photo-wrapper { padding-top:20px; }
+.photo { clear: both; position: relative; border: 1px solid #555; padding: 32px 15px 5px; background-color:#262626; color:#EEE; }
+
+.photo .fullsize-wrapper { background-color: #EEE; text-align:center; background-color:#262626; }
+.photo img.fullsize { max-width: 100%; }
+
+.photo .buttons { margin-top:3px; line-height:30px; width: 150px; float: left; }
+.photo .buttons .pin-it { margin-top:-3px; }
+.photo p { margin-top:10px; margin-right: 20px; }
+
+.photo a.previous:hover { background:url('../img/previous.png') no-repeat left center; opacity:.6; }
+.photo a.next:hover { background:url('../img/next.png') no-repeat right center; opacity:.6; }
+.photo a.nav { width: 40%; position:absolute; font-size:12px; top:7px; font-family:Georgia; font-weight:bold; text-transform:uppercase; }
+.photo a.previous { left:15px; }
+.photo a.next { right:15px; text-align:right; }
+
+#back-to-top { display:block; padding-top:20px; font-size:18px; font-family:Georgia; font-weight:bold; text-transform:uppercase;  }
+
+#footer { padding: 18px 0; }
+
+@media (max-width: 480px) {
+
+    #link { width:300px; margin:-150px; }
+    #link fieldset { width:260px; }
+    #link fieldset input { width:260px; }
+    
+    .photo { padding-top:10px; }
+    .photo .buttons { margin-left:10px; }
+        .photo a.previous, .photo a.next { display:none; }
+}
+ 
+@media (max-width: 768px) {
+    #traveller { display:none; }
+    #photos { margin-left: 0; }
+    
+    #header { padding:0 10px; }
+    #header h1 { font-size:24px; line-height:26px; }
+    .photo { border-right:none; border-left:none; }
+    .photo .fullsize-wrapper { margin-left: -15px; margin-right:-15px; }
+    .photo .buttons { width:110px; float:right; margin-left:20px; margin-top:0; line-height:40px; }
+    .photo p { margin-bottom:20px; }
+
+    .container-fluid { padding:0; }
+    
+}
+
+@media (max-width: 949px) {
+    #header { margin-left:0px; width:auto; }
+    #nav { font-size:11px; }
+    #nav img { margin:10px 10px 10px 10px; }
+}

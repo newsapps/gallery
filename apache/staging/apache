@@ -1,0 +1,39 @@
+<VirtualHost *:80>
+    ServerName gallery.beta.tribapps.com
+    ServerAlias www.gallery.beta.tribapps.com
+
+    SetEnv DEPLOYMENT_TARGET staging
+
+    SetEnvIf X-Forwarded-For "^163\.192\..*\..*" trib
+    <Location />
+       Order Deny,Allow
+       Allow from all
+    </Location>
+
+    <Directory  /home/newsapps/sites/gallery/repository/app>
+      AuthType Basic
+      AuthName "Authorized Access Only"
+      AuthUserFile /mnt/apps/passwords
+      Require valid-user
+    </Directory>
+
+    WSGIScriptAlias / /home/newsapps/sites/gallery/repository/app/staging.wsgi
+    
+    Redirect permanent /favicon.ico http://media-beta.tribapps.com/favicon.ico
+    
+    ErrorLog /home/newsapps/logs/gallery.error.log
+    LogLevel warn
+
+    CustomLog /home/newsapps/logs/gallery.access.log combined
+    
+    ServerSignature Off
+    
+    RewriteEngine on
+
+    # canonical hostname
+    RewriteCond %{HTTP_HOST} ^www.gallery.beta.tribapps.com [NC] 
+    RewriteRule ^/(.*)  http://gallery.beta.tribapps.com/$1 [L,R]
+    
+    RewriteCond %{REQUEST_URI} /maintenance.html$ 
+    RewriteRule $ / [R=302,L]
+</VirtualHost>

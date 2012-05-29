@@ -1,0 +1,23 @@
+[loggers]
+keys=root
+
+[handlers]
+keys=handler
+
+[formatters]
+keys=formatter
+
+[logger_root]
+level=INFO
+handlers=handler
+
+[handler_handler]
+class=FileHandler
+level=NOTSET
+formatter=formatter
+args=('/home/newsapps/logs/gallery.wsgi.log', 'w')
+
+[formatter_formatter]
+format=%(asctime)s %(levelname)s %(message)s
+datefmt=
+class=logging.Formatter

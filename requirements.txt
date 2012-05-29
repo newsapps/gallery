@@ -1,0 +1,18 @@
+# this may need to get done before PIL is installed on EC2 Ubuntu boxen
+# must be done on db (for compiling) and maybe on app?
+# sudo aptitude install libjpeg-dev zlib1g-dev
+Fabric==0.9.3
+Flask==0.8
+Jinja2==2.6
+Werkzeug==0.8.3
+boto==2.3.0
+certifi==0.0.8
+chardet==1.0.1
+paramiko==1.7.7.1
+pycrypto==2.5
+requests==0.10.8
+wsgiref==0.1.2
+python-dateutil==2.1
+PIL==1.1.7
+eventlet==0.9.16
+greenlet==0.3.4

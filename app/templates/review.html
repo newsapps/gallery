@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Review{% endblock title %}
+{% block creamyfilling %}
+<!-- settings 
+    HOST_NAME: {{ g.settings.HOST_NAME }}
+    DEPLOYMENT_TARGET: {{ g.settings.DEPLOYMENT_TARGET }}
+-->
+<div id="admin-review">
+<table><tr><td>
+<div class="container">
+    <div class="row">
+        <h3>This is a preview. Does it look correct? Are the thumbnails nice?</h3>
+        <p>If not, make changes in P2P, then come back here and click the "Regenerate" button. If you're happy with what you see, click "Next step".</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}    
+        
+        <form id="render_form" action="/render_gallery" method="post" accept-charset="utf-8" class="form-inline">
+            <input type="text" name="photo_gallery_slug" id="photo_gallery_slug" class="required input-xlarge" value="{{ slug }}">
+            <input type="text" data-provide="typeahead" name="section" id="section" value="{{ section }}" class='required'>
+            <input type="submit" class="btn btn-info" id="regenerate" value="Regenerate preview"/>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#publish-modal">Next step: Publish the gallery &raquo;</button>
+        </form>
+    </div>
+</td></tr><tr><td id="bottom-frame">
+    <iframe src="{{ url }}?ts={{ timestamp|default() }}" border="0" frameborder="0"></iframe>
+</td></tr></table>
+</div>
+
+<div class="modal hide" id="publish-modal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Almost there!</h3>
+    </div>
+    <div class="modal-body">
+        <form id="storylink-form" action="/publish" method="post" accept-charset="utf-8" class="form-horizontal">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="create_storylink">Make a storylink?</label>
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="create_storylink" value="true" id="create_storylink" checked>
+                            Uncheck if you'd rather just create the gallery<br/>and not have us make you a storylink.
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            <div id="storylink-meta">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="storylink_title">New storylink title</label>
+                        <div class="controls">
+                            <input type="text" name="storylink_title" id="storylink_title" class='required input-xlarge' value="{{ gallery.title }}">
+                            <p class="help-block">You may want to edit this.</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <input type="hidden" name="storylink_thumbnail" id="storylink_thumbnail" />
+            <input type="hidden" name="slug" value="{{ slug }}" />
+        </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">&laquo; Back to the preview</a>
+      <a href="#" class="btn btn-primary" id="storylink-form-go">Create the gallery!</a>
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+    $("#storylink-form").validate({
+        submitHandler: function(form) {
+            $('#publish-modal').animate({'opacity': 0}, 400);
+            $('<div id="wait-message">This may take a moment. A big gallery may take several minutes to generate.</div>')
+                .appendTo(document.body)
+            $('.modal-backdrop').spin({ lines: 12, length: 12, width: 5, radius: 14, color: '#ffffff' });
+            form.submit();
+        }
+    });
+    $('input#regenerate').click(function() {
+        $('<div id="wait-message">This may take a moment. A big gallery may take several minutes to generate.</div>')
+            .appendTo(document.body)
+        $('<div class="modal-backdrop" />')
+            .css('opacity', 0)
+            .appendTo(document.body)
+            .animate({'opacity' : 0.8})
+            .spin({ lines: 12, length: 12, width: 5, radius: 14, color: '#ffffff' });
+    });
+    $("#create_storylink").validate();
+    $("#create_storylink").change(function() {
+        var checked = $(this).is(':checked');
+        $("#storylink-form input:text").prop("disabled",!checked)
+        $("#storylink-meta").toggle(checked);
+    });
+    $("#storylink-form-go").click(function() {
+        $("#storylink-form").submit();
+        return false;
+    });
+    $("#section").typeahead({'source': SECTION_TYPEAHEAD_OPTIONS});
+    $("#photo_gallery_slug").focus();
+
+});
+</script>
+
+{% endblock creamyfilling %}
